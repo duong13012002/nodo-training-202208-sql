@@ -1,0 +1,29 @@
+--Chương 2
+--1
+select * from SALGRADE;
+--2
+select * from EMP;
+--3
+select distinct JOB from EMP;
+--4
+select ENAME, SAL*12 REMUNERATION from EMP;
+--5
+select ENAME ||' has help the position of ' || JOB ||' in dept ' || DEPTNO ||' since ' || HIREDATE from EMP;
+
+--Chương 3
+--1
+select DEPTNO, JOB, ENAME, SAL from EMP where SAL between 1000 and 2000;
+--2
+select DEPTNO, ENAME from EMP order by DEPTNO;
+--3
+select EMPNO,ENAME,JOB,MGR,HIREDATE,SAL,COMM,DEPTNO from EMP where DEPTNO in (10,20) order by ENAME ASC;
+--4
+select ENAME, JOB from EMP where JOB like 'CLERK'and DEPTNO like 20;
+--5
+select ENAME from EMP where  ENAME like '%TH%' or ENAME like '%LL%';
+--6
+select ENAME,JOB,SAL from EMP where JOB not like 'PRESIDENT';
+--7
+select ENAME,DEPTNO,HIREDATE from EMP where trunc(HIREDATE) between to_date('01/01/1983','dd/mm/yyyy') and to_date('31/12/1983','dd/mm/yyyy');
+--8
+select ENAME, SAL*12 ANUAL_SAL,COMM from EMP where SAL > COMM and JOB like 'SALESMAN' order by  ANUAL_SAL DESC,ENAME ASC;
