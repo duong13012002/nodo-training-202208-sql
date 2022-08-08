@@ -1,4 +1,5 @@
 --Chương 7
+
 -- --Bài 1: Tạo bảng PROJECT với các column được chỉ ra dưới đây, PROJID là promary key, và
 -- P_END_DATE > P_START_DATE.
 -- Column name    Data Type     Size.
