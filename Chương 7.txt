@@ -1,0 +1,53 @@
+--Chương 7
+-- --Bài 1: Tạo bảng PROJECT với các column được chỉ ra dưới đây, PROJID là promary key, và
+-- P_END_DATE > P_START_DATE.
+-- Column name    Data Type     Size.
+-- PROJID          NUMBER         4
+-- P_DESC          VARCHAR2       20
+-- P_START_DATE    DATE
+-- P_END_DATE      DATE
+-- BUDGET_AMOUNT   NUMBER         7,2
+-- MAX_NO_STAFF    NUMBER         2
+create table PROJECT_DUONG
+(
+    PROJID NUMBER(4,0) not null CONSTRAINT  PK_PROJECT_DUONG PRIMARY KEY,
+    P_DESC VARCHAR2(20),
+    P_END_DATE DATE ,
+    P_START_DATE DATE ,
+    BUDGET_AMOUNT NUMBER(7,2),
+    MAX_NO_STAFF NUMBER (2,0),
+    CHECK (P_END_DATE > P_START_DATE)
+);
+--Bài 2: Tạo bảng ASSIGNMENTS với các column được chỉ ra dưới đây, đồng thời cột
+-- PROJID là foreign key tới bảng PROJECT, cột EMPNO là foreign key tới bảng EMP.
+-- Column name       Data Type      Size.
+-- PROJID              NUMBER        4 NOT NULL
+-- EMPNO               NUMBER        4 NOT NULL
+-- A_START_DATE        DATE
+-- A_END_DATE          DATE
+-- BILL_AMOUNT         NUMBER        4,2
+-- ASSIGN_TYPE         VARCHAR2      2
+create table ASSIGNMENTS_DUONG(
+    PROJID NUMBER(4) NOT NULL,
+    EMPNO NUMBER(4) NOT NULL,
+    A_START_DATE DATE,
+    A_END_DATE DATE,
+    BILL_AMOUNT NUMBER(4,2),
+    ASSIGN_TYPE VARCHAR2(2),
+    CONSTRAINT "ASM_FK1" FOREIGN KEY ("EMPNO") REFERENCES "EMP"("EMPNO")
+    ON DELETE
+    CASCADE ENABLE,
+    CONSTRAINT "ASM_FK2" FOREIGN KEY ("PROJID") REFERENCES "PROJECT_DUONG"("PROJID")
+    ON DELETE
+    CASCADE ENABLE
+);
+--Bài 3: Thêm column COMMENTS kiểu LONG vào bảng PROJECTS. Thêm column HOURS kiểu NUMBER vào bảng ASSIGNMENTS.
+ALTER TABLE PROJECT_DUONG ADD(COMMENTS LONG);
+ALTER TABLE ASSIGNMENTS_DUONG ADD(HOURS NUMBER);
+--Bài 5: Thêm ràng buộc duy nhất (UNIQUE) cho 2 column PROJECT_ID và EMPNO của bảng ASSIGNMENTS.
+ALTER TABLE ASSIGNMENTS_DUONG MODIFY(PROJID UNIQUE);
+ALTER TABLE ASSIGNMENTS_DUONG MODIFY(EMPNO UNIQUE);
+--Bài 6: Xem các thông tin về các ràng buộc trong USER_CONSTRAINTS.
+SELECT * FROM USER_CONSTRAINTS;
+--Bài 7: Xem trong USER hiện tại có tất cả bao nhiêu bảng.
+SELECT TABLE_NAME FROM USER_TABLES;
