@@ -1,0 +1,9 @@
+--Chương 9:
+
+--Câu 1: Tạo Index trên cột PROJID cho bảng ASSIGNMENT.
+CREATE INDEX PROJ_INDEX ON ASSIGNMENTS_DUONG01(PROJID);
+--Câu 2: Hiển thị danh sách của nhân viên thuộc sự quản lý của người có tên là 1 biến được
+--nhập từ bàn phím
+SELECT e.EMPNO,e.ENAME,e.JOB,m.MGR,e.HIREDATE,e.SAL,e.COMM,e.DEPTNO
+FROM EMP e JOIN EMP m on e.MGR = m.EMPNO
+WHERE  m.MGR = (SELECT MGR FROM EMP WHERE ENAME='Nhập tên vào đây!');
