@@ -1,0 +1,157 @@
+--Bai 1 và bài 4
+create table NG_DUONG_NXB(
+    ID number(4) not null constraint PK_NXB primary key ,
+    MA number(4) unique ,
+    TEN varchar2(20),
+    TRANG_THAI number(2),
+    DIA_CHI varchar2(30),
+    MO_TA varchar2(30)
+);
+create table NG_DUONG_TAC_GIA(
+     ID number(4) not null constraint PK_TAC_GIA primary key ,
+     MA number(4) unique ,
+     TEN varchar2(20),
+     SDT NUMBER(10),
+     DIA_CHI varchar2(30),
+     MO_TA varchar2(30)
+    );
+create table NG_DUONG_SACH(
+     ID number(4) not null constraint PK_SACH primary key ,
+     MA number(4) unique ,
+     TEN varchar2(20),
+     ID_NXB number(4),
+     ID_TACGIA number(4),
+     CHU_DE varchar2(20),
+     NAM_XUAT_BAN date,
+     MO_TA varchar2(20),
+     SL_CON_LAI number(5),
+     SL_DANG_MUON number(5),
+     TONG_SACH number(5),
+     CONSTRAINT "FK_DUONG_NXB" foreign key ("ID_NXB") references "NG_DUONG_NXB" ("ID")
+     ON DELETE CASCADE ENABLE,
+     CONSTRAINT "FK_DUONG_TAC_GIA" foreign key ("ID_TACGIA") references "NG_DUONG_TAC_GIA" ("ID")
+     ON DELETE CASCADE ENABLE
+);
+create table NG_DUONG_BAN_DOC(
+    ID number(4) not null constraint PK_BAN_DOC primary key ,
+    MA number(4) unique ,
+    TEN varchar2(20),
+    SDT number(10),
+    DIA_CHI varchar2(20),
+    NGAY_SINH date,
+    NGAY_TAO date,
+    HANG number(4,0)
+);
+
+create table NG_DUONG_MUON_SACH(
+    ID number(4) not null constraint PK_MUON_SACH primary key ,
+    ID_BAN_DOC number(4) not null,
+    ID_SACH number(4) not null ,
+    SO_LUONG number(4),
+    NGAY_MUON date,
+    NGAY_TRA date,
+    TRANG_THAI number(1,0),
+    GHI_CHU varchar2(20),
+    CONSTRAINT "FK_DUONG_BAN_DOC" foreign key ("ID_BAN_DOC") references "NG_DUONG_BAN_DOC" ("ID")
+        ON DELETE CASCADE ENABLE,
+    CONSTRAINT "FK_DUONG_SACH" foreign key ("ID_SACH") references "NG_DUONG_SACH" ("ID")
+        ON DELETE CASCADE ENABLE
+)
+    PARTITION BY RANGE(NGAY_MUON)
+(
+    partition NGAY_MUON1 values less than (to_date('2022-02-01','YYYY-MM-DD')),
+    partition NGAY_MUON2 values less than (to_date('2022-03-01','YYYY-MM-DD')),
+    partition NGAY_MUON3 values less than (to_date('2022-04-01','YYYY-MM-DD')),
+    partition NGAY_MUON4 values less than (to_date('2022-05-01','YYYY-MM-DD')),
+    partition NGAY_MUON5 values less than (to_date('2022-06-01','YYYY-MM-DD')),
+    partition NGAY_MUON6 values less than (to_date('2022-07-01','YYYY-MM-DD')),
+    partition NGAY_MUON7 values less than (to_date('2022-08-01','YYYY-MM-DD')),
+    partition NGAY_MUON8 values less than (to_date('2022-09-01','YYYY-MM-DD')),
+    partition NGAY_MUON9 values less than (to_date('2022-10-01','YYYY-MM-DD')),
+    partition NGAY_MUON10 values less than (to_date('2022-11-01','YYYY-MM-DD')),
+    partition NGAY_MUON11 values less than (to_date('2022-12-01','YYYY-MM-DD'))
+                             );
+create index MUON_SACH_IDX_ID_BAN_DOC on NG_DUONG_MUON_SACH(ID_BAN_DOC);
+create index MUON_SACH_IDX_ID_SACH on NG_DUONG_MUON_SACH(ID_SACH);
+
+insert into NG_DUONG_NXB (ID, MA, TEN, TRANG_THAI, DIA_CHI, MO_TA)
+values (1,1,'Kim Dong','1','Ha Noi','Nha xuat ban Kim Dong');
+insert into NG_DUONG_NXB (ID, MA, TEN, TRANG_THAI, DIA_CHI, MO_TA)
+values (2,2,'Tuoi Tre','1','Ha Noi','Nha xuat ban Tuoi Tre');
+insert into NG_DUONG_NXB (ID, MA, TEN, TRANG_THAI, DIA_CHI, MO_TA)
+values (3,3,'Thanh Nien','1','Ha Noi','Nha xuat ban Thanh Nien');
+
+insert into NG_DUONG_TAC_GIA(ID, MA, TEN, SDT, DIA_CHI, MO_TA)
+values (111,1,'Thanh Son',0862882417,'Ha Noi','Tac gia Thanh Son');
+insert into NG_DUONG_TAC_GIA(ID, MA, TEN, SDT, DIA_CHI, MO_TA)
+values (222,2,'Ngo Sa Thach',0862882418,'Ho Chi Minh','Tac gia Ngo Sa Thach');
+insert into NG_DUONG_TAC_GIA(ID, MA, TEN, SDT, DIA_CHI, MO_TA)
+values (333,3,'Quang Duong',0862882419,'Vinh Phuc','Tac gia Quang Duong');
+
+insert into NG_DUONG_SACH(ID, MA, TEN, ID_NXB, ID_TACGIA, CHU_DE, NAM_XUAT_BAN, MO_TA, SL_CON_LAI, SL_DANG_MUON, TONG_SACH)
+values (1,1,'Tinh Yeu Va Thu Han',1,111,'Van Hoc',to_date('2013','YYYY'),'Tinh Yeu & Thu Han',10,4,14);
+insert into NG_DUONG_SACH(ID, MA, TEN, ID_NXB, ID_TACGIA, CHU_DE, NAM_XUAT_BAN, MO_TA, SL_CON_LAI, SL_DANG_MUON, TONG_SACH)
+values (2,2,'Luat Tam Thuc',2,222,'Khoa Hoc',to_date('2015','YYYY'),'Khai Mo Tam Tri',3,17,20);
+insert into NG_DUONG_SACH(ID, MA, TEN, ID_NXB, ID_TACGIA, CHU_DE, NAM_XUAT_BAN, MO_TA, SL_CON_LAI, SL_DANG_MUON, TONG_SACH)
+values (3,3,'No Pain No Gain',3,333,'Van Hoc',to_date('2020','YYYY'),'Truyen Dong Luc',1,22,23);
+
+insert into NG_DUONG_BAN_DOC(ID, MA, TEN, SDT, DIA_CHI, NGAY_SINH, NGAY_TAO, HANG)
+values (1,1,'Nguyen Cong Tam',0862445343,'Ha Noi',to_date('2002-03-12','YYYY-MM-DD'),to_date('2021-12-01','YYYY-MM-DD'),1);
+insert into NG_DUONG_BAN_DOC(ID, MA, TEN, SDT, DIA_CHI, NGAY_SINH, NGAY_TAO, HANG)
+values (2,2,'Nguyen Van Quan',0862445352,'Hai Duong',to_date('2001-02-10','YYYY-MM-DD'),to_date('2022-06-04','YYYY-MM-DD'),2);
+insert into NG_DUONG_BAN_DOC(ID, MA, TEN, SDT, DIA_CHI, NGAY_SINH, NGAY_TAO, HANG)
+values (3,3,'Le Thi Thu',0862445261,'Hai Phong',to_date('2005-07-17','YYYY-MM-DD'),to_date('2022-02-15','YYYY-MM-DD'),3);
+insert into NG_DUONG_BAN_DOC(ID, MA, TEN, SDT, DIA_CHI, NGAY_SINH, NGAY_TAO, HANG)
+values (4,4,'Dao Manh Hung',0862445668,'Quang Ninh',to_date('2003-07-21','YYYY-MM-DD'),to_date('2019-03-14','YYYY-MM-DD'),4);
+
+insert into NG_DUONG_MUON_SACH(ID, ID_BAN_DOC, ID_SACH, SO_LUONG, NGAY_MUON, NGAY_TRA, TRANG_THAI, GHI_CHU)
+values (1,1,2,1,to_date('2022-01-01','YYYY-MM-DD'),to_date('2022-08-20','YYYY-MM-DD'),1,'Dang Muon');
+insert into NG_DUONG_MUON_SACH(ID, ID_BAN_DOC, ID_SACH, SO_LUONG, NGAY_MUON, NGAY_TRA, TRANG_THAI, GHI_CHU)
+values (2,2,1,1,to_date('2022-02-01','YYYY-MM-DD'),to_date('2022-08-20','YYYY-MM-DD'),1,'Dang Muon');
+insert into NG_DUONG_MUON_SACH(ID, ID_BAN_DOC, ID_SACH, SO_LUONG, NGAY_MUON, NGAY_TRA, TRANG_THAI, GHI_CHU)
+values (3,3,3,1,to_date('2022-03-01','YYYY-MM-DD'),to_date('2022-08-20','YYYY-MM-DD'),1,'Dang Muon');
+insert into NG_DUONG_MUON_SACH(ID, ID_BAN_DOC, ID_SACH, SO_LUONG, NGAY_MUON, NGAY_TRA, TRANG_THAI, GHI_CHU)
+values (4,4,3,2,to_date('2022-04-01','YYYY-MM-DD'),to_date('2022-08-20','YYYY-MM-DD'),1,'Dang Muon');
+
+--Bai 2:
+create sequence NG_DUONG_NXB_SEQ
+    increment by 1
+    start with 1
+    minvalue 1
+    maxvalue 99999;
+
+create sequence NG_DUONG_TAC_GIA_SEQ
+    increment by 1
+    start with 1
+    minvalue 1
+    maxvalue 99999;
+
+create sequence NG_DUONG_SACH_SEQ
+    increment by 1
+    start with 1
+    minvalue 1
+    maxvalue 99999;
+create sequence NG_DUONG_BAN_DOC_SEQ
+    increment by 1
+    start with 1
+    minvalue 1
+    maxvalue 99999;
+create sequence NG_DUONG_MUON_SACH_SEQ
+    increment by 1
+    start with 1
+    minvalue 1
+    maxvalue 99999;
+
+--Bài 3:
+--Bài 4: Đã làm ở bài 1
+--Bài 5:
+select b.ID,b.TEN,a.CHU_DE,a.TONG_SACH
+from NG_DUONG_SACH a join NG_DUONG_TAC_GIA b on a.ID_TACGIA = b.ID
+order by TONG_SACH desc ;
+--Bài 6:
+select s.MA,s.TEN,nxb.TEN,tg.TEN,s.CHU_DE,s.NAM_XUAT_BAN,s.SL_CON_LAI,s.SL_DANG_MUON,s.TONG_SACH
+from NG_DUONG_TAC_GIA tg join NG_DUONG_SACH s on tg.ID = s.ID_TACGIA
+                        join NG_DUONG_NXB nxb on s.ID_NXB = nxb.ID
+where ROWNUM < 5
+order by SL_CON_LAI
+
