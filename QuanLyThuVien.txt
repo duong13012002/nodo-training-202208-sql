@@ -112,6 +112,8 @@ insert into NG_DUONG_MUON_SACH(ID, ID_BAN_DOC, ID_SACH, SO_LUONG, NGAY_MUON, NGA
 values (3,3,3,1,to_date('2022-03-01','YYYY-MM-DD'),to_date('2022-08-20','YYYY-MM-DD'),1,'Dang Muon');
 insert into NG_DUONG_MUON_SACH(ID, ID_BAN_DOC, ID_SACH, SO_LUONG, NGAY_MUON, NGAY_TRA, TRANG_THAI, GHI_CHU)
 values (4,4,3,2,to_date('2022-04-01','YYYY-MM-DD'),to_date('2022-08-20','YYYY-MM-DD'),1,'Dang Muon');
+insert into NG_DUONG_MUON_SACH(ID, ID_BAN_DOC, ID_SACH, SO_LUONG, NGAY_MUON, NGAY_TRA, TRANG_THAI, GHI_CHU)
+values (5,4,3,2,to_date('2022-08-08','YYYY-MM-DD'),to_date('2022-08-20','YYYY-MM-DD'),1,'Dang Muon');
 
 --Bai 2:
 create sequence NG_DUONG_NXB_SEQ
@@ -152,6 +154,31 @@ order by TONG_SACH desc ;
 select s.MA,s.TEN,nxb.TEN,tg.TEN,s.CHU_DE,s.NAM_XUAT_BAN,s.SL_CON_LAI,s.SL_DANG_MUON,s.TONG_SACH
 from NG_DUONG_TAC_GIA tg join NG_DUONG_SACH s on tg.ID = s.ID_TACGIA
                         join NG_DUONG_NXB nxb on s.ID_NXB = nxb.ID
-where ROWNUM < 5
-order by SL_CON_LAI
+where ROWNUM <=10
+order by SL_CON_LAI;
+--Bài 7
+
+select bd.MA,bd.TEN,s.MA,s.TEN,ms.NGAY_MUON
+from NG_DUONG_BAN_DOC bd join NG_DUONG_MUON_SACH ms on bd.ID = ms.ID_BAN_DOC
+join NG_DUONG_SACH s on ms.ID_SACH = s.ID
+where (to_char(NGAY_MUON,'MM/YYYY') like (select to_char(sysdate,'MM/YYYY') from DUAL))
+and (to_char(NGAY_MUON,'DD') < (select to_char(sysdate,'DD') from DUAL));
+
+--Bài 8
+select s.TEN, s.SL_DANG_MUON,ms.NGAY_MUON
+from NG_DUONG_SACH s join NG_DUONG_MUON_SACH ms on s.ID = ms.ID_SACH
+where to_char(NGAY_MUON,'YYYY') like (select to_char(sysdate,'YYYY')from DUAL)
+and ROWNUM <=10
+order by SL_DANG_MUON desc;
+--Bài 9
+select bd.MA,bd.TEN,count(ms.ID_BAN_DOC) SO_LAN_MUON
+from NG_DUONG_BAN_DOC bd join NG_DUONG_MUON_SACH ms on bd.ID = ms.ID_BAN_DOC
+where to_char(ms.NGAY_MUON,'YYYY') like (select to_char(sysdate,'YYYY') from DUAL)
+group by bd.MA, bd.TEN;
+--Bài 10
+select MA,TEN,(select to_char(sysdate,'YYYY') from DUAL) - to_char(NGAY_SINH,'YYYY') TUOI
+from NG_DUONG_BAN_DOC;
+--Bài 11
+--Bài 12
+select s.NAM_XUAT_BAN,nxb.MA,nxb.TEN, from NG_DUONG_SACH s join NG_DUONG_NXB nxb on nxb.ID = s.ID_NXB;
 
