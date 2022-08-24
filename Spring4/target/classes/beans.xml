@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-4.2.xsd"
+		default-init-method="initMessage" default-destroy-method="release">
+
+	<bean id="HelloClass" class="SpringCore.HelloClass" >
+		<property name="clazzes">
+			<list>
+				<ref bean="jee01"/>
+			</list>
+		</property>
+	</bean>
+	<bean id="HelloClass2" class="SpringCore.HelloClass" init-method="initMessage">
+		<constructor-arg ref="HelloClass"/>
+	</bean>
+	<bean class="SpringCore.InitSampleBean"/>
+<!--	<bean id="helloWorld" class="SpringCore.HelloWorld" parent="HelloClass"/>-->
+<!--	<bean id = "sampleTemplate" abstract="true">-->
+<!--		<property name="message" value="Template say Hello!"/>-->
+<!--	</bean>-->
+	<bean id="helloWorld" class="SpringCore.HelloWorld">
+		<property name="clazz" >
+			<bean id = "HelloClass" class="SpringCore.HelloClass">
+				<property name="message" value="Hello Class Instance is Inner Bean!"/>
+			</bean>
+		</property>
+	</bean>
+	<bean id="jee01" class="SpringCore.JavaClazz">
+		<property name="students">
+			<map>
+				<entry key="Nguyen Van A" value="23"/>
+				<entry key="Nguyen Van B" value="22"/>
+				<entry key="Nguyen Van C" value="21"/>
+				<entry key="Nguyen Van D" value="20"/>
+			</map>
+		</property>
+	</bean>
+</beans>
